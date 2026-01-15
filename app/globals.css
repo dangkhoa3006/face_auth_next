@@ -8,19 +8,104 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --color-primary: #248f7d;
+  --color-background-light: #f9fafa;
+  --color-background-dark: #16181d;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+
+.form-input:focus {
+  border-color: #248f7d !important;
+  box-shadow: 0 0 0 1px #248f7d !important;
+}
+
+html {
+  height: 100%;
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
 }
 
 body {
+  height: 100%;
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-display), "Manrope", sans-serif;
+}
+
+#__next {
+  height: 100%;
+  overflow: hidden !important;
+}
+
+/* Animations cho Face Recognition Component */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-\[shimmer_2s_infinite\] {
+  animation: shimmer 2s infinite;
+}
+
+/* Smooth transitions */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in-95 {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.zoom-in-95 {
+  animation: zoom-in-95 0.3s ease-out;
+}
+
+/* Animation delays cho ping effects */
+.animate-ping-delay-1 {
+  animation-delay: 0.2s;
+}
+
+.animate-ping-delay-2 {
+  animation-delay: 0.4s;
+}
+
+.animate-ping-delay-3 {
+  animation-delay: 0.6s;
+}
+
+/* Progress bar width */
+.progress-bar {
+  width: var(--progress-width, 0%);
 }
