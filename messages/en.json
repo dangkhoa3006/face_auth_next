@@ -1,0 +1,86 @@
+{
+  "common": {
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "avatar": "Avatar URL (Optional)",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "or": "or",
+    "remember": "Remember this device",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signUp": "Create Account",
+    "register": "Register",
+    "login": "Login",
+    "selectLanguage": "Select language"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your account",
+    "faceLogin": "Login with Face Recognition",
+    "emailPlaceholder": "name@company.com",
+    "passwordPlaceholder": "Enter your password",
+    "success": "Login successful! Welcome {name}",
+    "error": "Login failed",
+    "invalidCredentials": "Email or password is incorrect"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Sign up to get started",
+    "faceRegister": "Register Face",
+    "namePlaceholder": "Enter your full name",
+    "emailPlaceholder": "name@company.com",
+    "phonePlaceholder": "0123456789",
+    "passwordPlaceholder": "Create password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "avatarPlaceholder": "https://example.com/avatar.jpg",
+    "success": "Registration successful! You can login now.",
+    "error": "Registration failed",
+    "faceAlreadyExists": "This face has already been registered with email: {email}. Please login instead of registering.",
+    "faceRegistered": "Face registered successfully! You can login now."
+  },
+  "faceRecognition": {
+    "enroll": "Register Face",
+    "login": "Login with Face",
+    "processing": "Processing...",
+    "loadingModels": "Loading models...",
+    "detecting": "Detecting face...",
+    "faceDetected": "Face detected",
+    "positionFace": "Position your face in the frame",
+    "scanToEnroll": "Scan your face to register",
+    "scanToLogin": "Scan your face to login",
+    "startingCamera": "Starting camera...",
+    "instructions": {
+      "title": "Instructions:",
+      "position": "Position your face in the frame",
+      "lighting": "Ensure adequate lighting",
+      "lookStraight": "Look straight at the camera",
+      "holdStill": "Hold still when you see \"Face detected\""
+    },
+    "confirm": "Confirm",
+    "waiting": "Waiting for detection",
+    "error": "Face recognition error",
+    "cameraError": "Cannot access camera. Please check permissions.",
+    "modelsLoadError": "Failed to load face recognition models"
+  },
+  "validation": {
+    "required": "{field} is required",
+    "emailInvalid": "Invalid email",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordNoUppercase": "Password must contain at least 1 uppercase letter",
+    "passwordNoLowercase": "Password must contain at least 1 lowercase letter",
+    "passwordNoNumber": "Password must contain at least 1 number",
+    "passwordNoSpecial": "Password must contain at least 1 special character",
+    "passwordMismatch": "Passwords do not match",
+    "passwordValid": "✓ Password is valid"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Network error",
+    "server": "Server error"
+  }
+}

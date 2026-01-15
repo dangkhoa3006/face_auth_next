@@ -17,6 +17,7 @@
     "face-api.js": "^0.22.2",
     "jsonwebtoken": "^9.0.3",
     "next": "16.1.2",
+    "next-intl": "^4.7.0",
     "pg": "^8.17.1",
     "prisma": "^7.2.0",
     "react": "19.2.3",

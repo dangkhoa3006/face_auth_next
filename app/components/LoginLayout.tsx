@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import VisualSection from "./VisualSection";
 import LoginHeader from "./LoginHeader";
 import FaceRecognitionButton from "./FaceRecognitionButton";
@@ -8,7 +9,9 @@ import LoginForm from "./LoginForm";
 import LoginFooter from "./LoginFooter";
 
 export default function LoginLayout() {
-  const [loading, setLoading] = useState(false);
+    const t = useTranslations("login");
+    const tCommon = useTranslations("common");
+    const [loading, setLoading] = useState(false);
   const [enrolledUsers, setEnrolledUsers] = useState<Array<{ faceId: string; descriptor: string }>>([]);
 
   // Ngăn scroll hoàn toàn
@@ -113,18 +116,18 @@ export default function LoginLayout() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Lưu token vào localStorage
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        }
-        alert(`Đăng nhập thành công! Chào mừng ${data.user.name || data.user.email}`);
-        // Có thể redirect đến trang dashboard ở đây
-        window.location.href = "/dashboard";
-      } else {
-        alert(`Lỗi: ${data.error || "Không tìm thấy người dùng"}`);
-      }
+            if (response.ok) {
+                // Lưu token vào localStorage
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                }
+                alert(t("success", { name: data.user.name || data.user.email }));
+                // Có thể redirect đến trang dashboard ở đây
+                window.location.href = "/dashboard";
+            } else {
+                alert(`${t("error")}: ${data.error || t("invalidCredentials")}`);
+            }
     } catch (error) {
       console.error("Login error:", error);
       alert("Đã xảy ra lỗi khi đăng nhập");
@@ -150,23 +153,23 @@ export default function LoginLayout() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Lưu token vào localStorage
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          
-          // Nếu remember = true, có thể lưu vào cookie với thời gian dài hơn
-          if (remember) {
-            // Có thể implement cookie storage ở đây nếu cần
-          }
-        }
-        alert(`Đăng nhập thành công! Chào mừng ${data.user.name || data.user.email}`);
-        // Redirect đến trang dashboard
-        window.location.href = "/dashboard";
-      } else {
-        alert(`Lỗi: ${data.error || "Email hoặc password không đúng"}`);
-      }
+            if (response.ok) {
+                // Lưu token vào localStorage
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    
+                    // Nếu remember = true, có thể lưu vào cookie với thời gian dài hơn
+                    if (remember) {
+                        // Có thể implement cookie storage ở đây nếu cần
+                    }
+                }
+                alert(t("success", { name: data.user.name || data.user.email }));
+                // Redirect đến trang dashboard
+                window.location.href = "/dashboard";
+            } else {
+                alert(`${t("error")}: ${data.error || t("invalidCredentials")}`);
+            }
     } catch (error) {
       console.error("Form login error:", error);
       alert("Đã xảy ra lỗi khi đăng nhập");
@@ -194,7 +197,7 @@ export default function LoginLayout() {
           <div className="relative flex items-center py-4">
             <div className="flex-grow border-t border-[#dde4e3] dark:border-gray-700"></div>
             <span className="flex-shrink mx-4 text-[#67837f] text-sm font-bold uppercase tracking-widest">
-              or
+              {tCommon("or")}
             </span>
             <div className="flex-grow border-t border-[#dde4e3] dark:border-gray-700"></div>
           </div>

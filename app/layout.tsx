@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { cookies } from "next/headers";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -13,13 +16,17 @@ export const metadata: Metadata = {
   description: "Next-gen biometric authentication for your digital workspace",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get("locale")?.value || "vi";
+  const messages = await getMessages();
+
   return (
-    <html lang="en" className="light">
+    <html lang={locale} className="light">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap"
@@ -33,7 +40,9 @@ export default function RootLayout({
       <body
         className={`${manrope.variable} bg-background-light dark:bg-background-dark font-display text-[#121716] dark:text-white antialiased h-screen overflow-hidden`}
       >
-        {children}
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -10,12 +10,17 @@ export function handleError(error: unknown): NextResponse {
 
   // Nếu là AppException (custom exception)
   if (error instanceof AppException) {
+    // Luôn trả về details nếu có code đặc biệt cần xử lý ở frontend
+    const shouldIncludeDetails = 
+      process.env.NODE_ENV === "development" || 
+      error.code === "FACE_ALREADY_EXISTS" ||
+      (error.details && (error.details as any).redirectToLogin);
+    
     return NextResponse.json(
       {
         error: error.message,
         code: error.code,
-        details:
-          process.env.NODE_ENV === "development" ? error.details : undefined,
+        details: shouldIncludeDetails ? error.details : undefined,
       },
       { status: error.statusCode }
     );

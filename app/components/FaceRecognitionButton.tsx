@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 import * as faceapi from "face-api.js";
 import {
   loadModels,
@@ -22,6 +23,8 @@ export default function FaceRecognitionButton({
   mode = "login",
   email = "",
 }: FaceRecognitionButtonProps) {
+  const t = useTranslations("faceRecognition");
+  const tCommon = useTranslations("common");
   const [loading, setLoading] = useState(false);
   const [modelsReady, setModelsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,8 +45,9 @@ export default function FaceRecognitionButton({
       .then(() => setModelsReady(true))
       .catch((err) => {
         console.error("Failed to load models:", err);
-        setError("Không thể tải models nhận diện khuôn mặt");
+        setError(t("modelsLoadError"));
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Cleanup interval khi component unmount hoặc camera đóng
@@ -160,7 +164,7 @@ export default function FaceRecognitionButton({
       setCameraStream(stream);
     } catch (err) {
       console.error("Error accessing camera:", err);
-      alert("Không thể truy cập camera. Vui lòng kiểm tra quyền truy cập.");
+      alert(t("cameraError"));
       setShowCamera(false);
       setCameraStream(null);
     }
@@ -196,7 +200,7 @@ export default function FaceRecognitionButton({
       const video = videoRef.current;
       const ctx = canvas.getContext("2d");
 
-      if (!ctx) throw new Error("Không thể lấy canvas context");
+      if (!ctx) throw new Error(t("error"));
 
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
@@ -283,12 +287,12 @@ export default function FaceRecognitionButton({
         </span>
         <span className="relative z-10">
           {loading
-            ? "Đang xử lý..."
+            ? t("processing")
             : !modelsReady
-              ? "Đang tải models..."
+              ? t("loadingModels")
               : mode === "enroll"
-                ? "Đăng ký khuôn mặt"
-                : "Đăng nhập bằng khuôn mặt"}
+                ? t("enroll")
+                : t("login")}
         </span>
 
         {/* Loading indicator */}
@@ -322,10 +326,10 @@ export default function FaceRecognitionButton({
                 </div>
                 <div>
                   <h3 className="text-base font-bold">
-                    {mode === "enroll" ? "Đăng ký khuôn mặt" : "Đăng nhập bằng khuôn mặt"}
+                    {mode === "enroll" ? t("enroll") : t("login")}
                   </h3>
                   <p className="text-[10px] text-white/80 mt-0.5">
-                    {mode === "enroll" ? "Quét khuôn mặt để đăng ký" : "Quét khuôn mặt để đăng nhập"}
+                    {mode === "enroll" ? t("scanToEnroll") : t("scanToLogin")}
                   </p>
                 </div>
               </div>
@@ -359,7 +363,7 @@ export default function FaceRecognitionButton({
                         camera
                       </span>
                     </div>
-                    <p className="text-sm font-medium">Đang khởi động camera...</p>
+                    <p className="text-sm font-medium">{t("startingCamera")}</p>
                   </div>
                 </div>
               )}
@@ -370,12 +374,12 @@ export default function FaceRecognitionButton({
                 {faceDetected ? (
                   <div className="mx-auto max-w-fit bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl backdrop-blur-sm border border-white/20 animate-in zoom-in-95 duration-300">
                     <span className="material-symbols-outlined text-sm animate-in zoom-in">check_circle</span>
-                    <span className="text-xs font-bold">Đã phát hiện khuôn mặt</span>
+                    <span className="text-xs font-bold">{t("faceDetected")}</span>
                   </div>
                 ) : (
                   <div className="mx-auto max-w-fit bg-gradient-to-r from-yellow-500 to-amber-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl backdrop-blur-sm border border-white/20">
                     <span className="material-symbols-outlined text-sm animate-pulse">face</span>
-                    <span className="text-xs font-bold">Đưa khuôn mặt vào khung</span>
+                    <span className="text-xs font-bold">{t("positionFace")}</span>
                   </div>
                 )}
 
@@ -434,23 +438,23 @@ export default function FaceRecognitionButton({
                     <span className="material-symbols-outlined text-sm">info</span>
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold mb-1 text-xs">Hướng dẫn:</p>
+                    <p className="font-bold mb-1 text-xs">{t("instructions.title")}</p>
                     <ul className="space-y-1 text-[10px]">
                       <li className="flex items-center gap-1.5">
                         <span className="w-1 h-1 bg-primary rounded-full flex-shrink-0"></span>
-                        <span>Đưa khuôn mặt vào khung hình</span>
+                        <span>{t("instructions.position")}</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <span className="w-1 h-1 bg-primary rounded-full flex-shrink-0"></span>
-                        <span>Đảm bảo đủ ánh sáng</span>
+                        <span>{t("instructions.lighting")}</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <span className="w-1 h-1 bg-primary rounded-full flex-shrink-0"></span>
-                        <span>Nhìn thẳng vào camera</span>
+                        <span>{t("instructions.lookStraight")}</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <span className="w-1 h-1 bg-primary rounded-full flex-shrink-0"></span>
-                        <span>Giữ nguyên khi thấy &quot;Đã phát hiện&quot;</span>
+                        <span>{t("instructions.holdStill")}</span>
                       </li>
                     </ul>
                   </div>
@@ -466,7 +470,7 @@ export default function FaceRecognitionButton({
                 className="flex-1 bg-gray-200/80 dark:bg-gray-700/80 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2.5 px-4 rounded-xl font-bold text-sm transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm border border-gray-300/50 dark:border-gray-600/50"
               >
                 <span className="material-symbols-outlined text-base">close</span>
-                Hủy
+                {tCommon("cancel")}
               </button>
               <button
                 onClick={captureAndProcess}
@@ -482,7 +486,7 @@ export default function FaceRecognitionButton({
                 {loading ? (
                   <>
                     <span className="material-symbols-outlined text-base animate-spin relative z-10">sync</span>
-                    <span className="relative z-10">Đang xử lý...</span>
+                    <span className="relative z-10">{t("processing")}</span>
                   </>
                 ) : (
                   <>
@@ -490,7 +494,7 @@ export default function FaceRecognitionButton({
                       {faceDetected ? 'camera' : 'hourglass_empty'}
                     </span>
                     <span className="relative z-10">
-                      {faceDetected ? "Xác nhận" : "Chờ phát hiện"}
+                      {faceDetected ? t("confirm") : t("waiting")}
                     </span>
                   </>
                 )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { validatePassword } from "@/app/lib/passwordValidation";
 
 interface RegisterFormProps {
@@ -16,6 +17,9 @@ interface RegisterFormProps {
 }
 
 export default function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
+  const t = useTranslations("register");
+  const tCommon = useTranslations("common");
+  const tValidation = useTranslations("validation");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [sdt, setSdt] = useState("");
@@ -43,7 +47,7 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
     }
 
     if (password !== confirmPassword) {
-      alert("Mật khẩu xác nhận không khớp!");
+      alert(tValidation("passwordMismatch"));
       return;
     }
 
@@ -61,12 +65,12 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
     <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Họ và Tên
+          {tCommon("name")}
         </label>
         <div className="relative">
           <input
             className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
-            placeholder="Nhập họ và tên"
+            placeholder={t("namePlaceholder")}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -81,12 +85,12 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
 
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Email Address
+          {tCommon("email")}
         </label>
         <div className="relative">
           <input
             className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
-            placeholder="name@company.com"
+            placeholder={t("emailPlaceholder")}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -101,12 +105,12 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
 
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Số Điện Thoại
+          {tCommon("phone")}
         </label>
         <div className="relative">
           <input
             className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
-            placeholder="0123456789"
+            placeholder={t("phonePlaceholder")}
             type="tel"
             value={sdt}
             onChange={(e) => setSdt(e.target.value)}
@@ -121,14 +125,14 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
 
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Password
+          {tCommon("password")}
         </label>
         <div className="relative flex items-stretch">
           <input
             className={`form-input flex-1 rounded-l-xl border-[#dde4e3] border-r-0 dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50 ${
               passwordErrors.length > 0 ? "border-red-500" : ""
             }`}
-            placeholder="Tạo mật khẩu"
+            placeholder={t("passwordPlaceholder")}
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => handlePasswordChange(e.target.value)}
@@ -154,14 +158,14 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
         )}
         {password.length > 0 && passwordErrors.length === 0 && (
           <div className="text-xs text-green-600 dark:text-green-400">
-            ✓ Mật khẩu hợp lệ
+            {tValidation("passwordValid")}
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Confirm Password
+          {tCommon("confirmPassword")}
         </label>
         <div className="relative flex items-stretch">
           <input
@@ -170,7 +174,7 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
                 ? "border-red-500"
                 : ""
             }`}
-            placeholder="Xác nhận mật khẩu"
+            placeholder={t("confirmPasswordPlaceholder")}
             type={showConfirmPassword ? "text" : "password"}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -189,19 +193,19 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
         </div>
         {confirmPassword.length > 0 && password !== confirmPassword && (
           <div className="text-xs text-red-600 dark:text-red-400">
-            Mật khẩu xác nhận không khớp
+            {tValidation("passwordMismatch")}
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Avatar URL (Tùy chọn)
+          {tCommon("avatar")}
         </label>
         <div className="relative">
           <input
             className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
-            placeholder="https://example.com/avatar.jpg"
+            placeholder={t("avatarPlaceholder")}
             type="url"
             value={avatar}
             onChange={(e) => setAvatar(e.target.value)}
@@ -218,7 +222,7 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
         type="submit"
         disabled={loading}
       >
-        {loading ? "Đang xử lý..." : "Tạo Tài Khoản"}
+        {loading ? tCommon("loading") : tCommon("signUp")}
       </button>
     </form>
   );

@@ -60,6 +60,61 @@ export class AuthService implements IAuthService {
       throw new ConflictException("Email đã được đăng ký");
     }
 
+    // Kiểm tra khuôn mặt đã tồn tại chưa (nếu có faceDescriptor)
+    if (data.faceDescriptor) {
+      try {
+        // Parse current descriptor
+        const currentDescriptor = new Float32Array(JSON.parse(data.faceDescriptor));
+        
+        // Lấy tất cả users có faceDescriptor
+        const usersWithFace = await this.userRepository.findAllWithFaceDescriptor();
+        
+        // So sánh với từng user
+        for (const user of usersWithFace) {
+          if (!user.faceDescriptor) continue;
+          
+          try {
+            const userDescriptor =
+              this.faceRecognitionService.stringToDescriptor(user.faceDescriptor);
+            const isMatch = this.faceRecognitionService.isMatch(
+              currentDescriptor,
+              userDescriptor
+            );
+            
+            if (isMatch) {
+              // Khuôn mặt đã tồn tại - báo cần đăng nhập
+              throw new ConflictException(
+                "Khuôn mặt này đã được đăng ký. Vui lòng đăng nhập thay vì đăng ký.",
+                { 
+                  code: "FACE_ALREADY_EXISTS",
+                  existingUserEmail: user.email,
+                  redirectToLogin: true 
+                }
+              );
+            }
+          } catch (error) {
+            // Nếu là ConflictException với redirectToLogin, throw lại
+            if (error instanceof ConflictException && (error.details as any)?.redirectToLogin) {
+              throw error;
+            }
+            // Skip user nếu descriptor không hợp lệ
+            console.error(
+              `Error comparing descriptor for user ${user.id}:`,
+              error
+            );
+            continue;
+          }
+        }
+      } catch (error) {
+        // Nếu là ConflictException với redirectToLogin, throw lại
+        if (error instanceof ConflictException && (error.details as any)?.redirectToLogin) {
+          throw error;
+        }
+        // Nếu lỗi parse descriptor, tiếp tục đăng ký bình thường
+        console.error("Error checking face descriptor:", error);
+      }
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
@@ -113,6 +168,61 @@ export class AuthService implements IAuthService {
     const existingUser = await this.userRepository.findByEmail(data.email);
     if (existingUser) {
       throw new ConflictException("Email đã được đăng ký");
+    }
+
+    // Kiểm tra khuôn mặt đã tồn tại chưa (nếu có faceDescriptor)
+    if (data.faceDescriptor) {
+      try {
+        // Parse current descriptor
+        const currentDescriptor = new Float32Array(JSON.parse(data.faceDescriptor));
+        
+        // Lấy tất cả users có faceDescriptor
+        const usersWithFace = await this.userRepository.findAllWithFaceDescriptor();
+        
+        // So sánh với từng user
+        for (const user of usersWithFace) {
+          if (!user.faceDescriptor) continue;
+          
+          try {
+            const userDescriptor =
+              this.faceRecognitionService.stringToDescriptor(user.faceDescriptor);
+            const isMatch = this.faceRecognitionService.isMatch(
+              currentDescriptor,
+              userDescriptor
+            );
+            
+            if (isMatch) {
+              // Khuôn mặt đã tồn tại - báo cần đăng nhập
+              throw new ConflictException(
+                "Khuôn mặt này đã được đăng ký. Vui lòng đăng nhập thay vì đăng ký.",
+                { 
+                  code: "FACE_ALREADY_EXISTS",
+                  existingUserEmail: user.email,
+                  redirectToLogin: true 
+                }
+              );
+            }
+          } catch (error) {
+            // Nếu là ConflictException với redirectToLogin, throw lại
+            if (error instanceof ConflictException && (error.details as any)?.redirectToLogin) {
+              throw error;
+            }
+            // Skip user nếu descriptor không hợp lệ
+            console.error(
+              `Error comparing descriptor for user ${user.id}:`,
+              error
+            );
+            continue;
+          }
+        }
+      } catch (error) {
+        // Nếu là ConflictException với redirectToLogin, throw lại
+        if (error instanceof ConflictException && (error.details as any)?.redirectToLogin) {
+          throw error;
+        }
+        // Nếu lỗi parse descriptor, tiếp tục đăng ký bình thường
+        console.error("Error checking face descriptor:", error);
+      }
     }
 
     // Tạo faceId nếu không có

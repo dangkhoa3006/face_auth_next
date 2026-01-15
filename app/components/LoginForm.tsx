@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useTranslations } from "next-intl";
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string, remember: boolean) => void;
@@ -8,6 +9,8 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
+  const t = useTranslations("login");
+  const tCommon = useTranslations("common");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,12 +25,12 @@ export default function LoginForm({ onSubmit, loading = false }: LoginFormProps)
     <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-          Email Address
+          {tCommon("email")}
         </label>
         <div className="relative">
           <input
             className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
-            placeholder="name@company.com"
+            placeholder={t("emailPlaceholder")}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -42,19 +45,19 @@ export default function LoginForm({ onSubmit, loading = false }: LoginFormProps)
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
-            Password
+            {tCommon("password")}
           </label>
           <a
             className="text-primary text-xs font-bold hover:underline"
             href="#"
           >
-            Forgot password?
+            {tCommon("forgotPassword")}
           </a>
         </div>
         <div className="relative flex items-stretch">
           <input
             className="form-input flex-1 rounded-l-xl border-[#dde4e3] border-r-0 dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
-            placeholder="Enter your password"
+            placeholder={t("passwordPlaceholder")}
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -87,7 +90,7 @@ export default function LoginForm({ onSubmit, loading = false }: LoginFormProps)
             </span>
           </div>
           <span className="text-[#121716] dark:text-gray-300 text-sm font-medium">
-            Remember this device
+            {tCommon("remember")}
           </span>
         </label>
       </div>
@@ -96,7 +99,7 @@ export default function LoginForm({ onSubmit, loading = false }: LoginFormProps)
         type="submit"
         disabled={loading}
       >
-        {loading ? "Đang đăng nhập..." : "Sign In"}
+        {loading ? tCommon("loading") : tCommon("signIn")}
       </button>
     </form>
   );

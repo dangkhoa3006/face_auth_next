@@ -1,0 +1,86 @@
+{
+  "common": {
+    "email": "Địa chỉ Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "name": "Họ và Tên",
+    "phone": "Số Điện Thoại",
+    "avatar": "URL Avatar (Tùy chọn)",
+    "submit": "Gửi",
+    "cancel": "Hủy",
+    "loading": "Đang tải...",
+    "or": "hoặc",
+    "remember": "Ghi nhớ thiết bị này",
+    "forgotPassword": "Quên mật khẩu?",
+    "signIn": "Đăng Nhập",
+    "signUp": "Tạo Tài Khoản",
+    "register": "Đăng Ký",
+    "login": "Đăng Nhập",
+    "selectLanguage": "Chọn ngôn ngữ"
+  },
+  "login": {
+    "title": "Chào Mừng Trở Lại",
+    "subtitle": "Đăng nhập vào tài khoản của bạn",
+    "faceLogin": "Đăng nhập bằng khuôn mặt",
+    "emailPlaceholder": "name@company.com",
+    "passwordPlaceholder": "Nhập mật khẩu của bạn",
+    "success": "Đăng nhập thành công! Chào mừng {name}",
+    "error": "Đăng nhập thất bại",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng"
+  },
+  "register": {
+    "title": "Tạo Tài Khoản",
+    "subtitle": "Đăng ký để bắt đầu",
+    "faceRegister": "Đăng ký khuôn mặt",
+    "namePlaceholder": "Nhập họ và tên",
+    "emailPlaceholder": "name@company.com",
+    "phonePlaceholder": "0123456789",
+    "passwordPlaceholder": "Tạo mật khẩu",
+    "confirmPasswordPlaceholder": "Xác nhận mật khẩu",
+    "avatarPlaceholder": "https://example.com/avatar.jpg",
+    "success": "Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.",
+    "error": "Đăng ký thất bại",
+    "faceAlreadyExists": "Khuôn mặt này đã được đăng ký với email: {email}. Vui lòng đăng nhập thay vì đăng ký.",
+    "faceRegistered": "Đăng ký khuôn mặt thành công! Bạn có thể đăng nhập ngay bây giờ."
+  },
+  "faceRecognition": {
+    "enroll": "Đăng ký khuôn mặt",
+    "login": "Đăng nhập bằng khuôn mặt",
+    "processing": "Đang xử lý...",
+    "loadingModels": "Đang tải models...",
+    "detecting": "Đang phát hiện khuôn mặt...",
+    "faceDetected": "Đã phát hiện khuôn mặt",
+    "positionFace": "Đưa khuôn mặt vào khung hình",
+    "scanToEnroll": "Quét khuôn mặt để đăng ký",
+    "scanToLogin": "Quét khuôn mặt để đăng nhập",
+    "startingCamera": "Đang khởi động camera...",
+    "instructions": {
+      "title": "Hướng dẫn:",
+      "position": "Đưa khuôn mặt vào khung hình",
+      "lighting": "Đảm bảo đủ ánh sáng",
+      "lookStraight": "Nhìn thẳng vào camera",
+      "holdStill": "Giữ nguyên khi thấy \"Đã phát hiện\""
+    },
+    "confirm": "Xác nhận",
+    "waiting": "Chờ phát hiện",
+    "error": "Lỗi nhận diện khuôn mặt",
+    "cameraError": "Không thể truy cập camera. Vui lòng kiểm tra quyền truy cập.",
+    "modelsLoadError": "Không thể tải models nhận diện khuôn mặt"
+  },
+  "validation": {
+    "required": "{field} là bắt buộc",
+    "emailInvalid": "Email không hợp lệ",
+    "passwordTooShort": "Mật khẩu phải có tối thiểu 8 ký tự",
+    "passwordNoUppercase": "Mật khẩu phải có ít nhất 1 chữ hoa",
+    "passwordNoLowercase": "Mật khẩu phải có ít nhất 1 chữ thường",
+    "passwordNoNumber": "Mật khẩu phải có ít nhất 1 số",
+    "passwordNoSpecial": "Mật khẩu phải có ít nhất 1 ký tự đặc biệt",
+    "passwordMismatch": "Mật khẩu xác nhận không khớp",
+    "passwordValid": "✓ Mật khẩu hợp lệ"
+  },
+  "errors": {
+    "generic": "Đã xảy ra lỗi",
+    "network": "Lỗi kết nối",
+    "server": "Lỗi máy chủ"
+  }
+}

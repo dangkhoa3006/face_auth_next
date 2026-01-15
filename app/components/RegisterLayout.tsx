@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import VisualSection from "./VisualSection";
 import RegisterHeader from "./RegisterHeader";
 import FaceRecognitionButton from "./FaceRecognitionButton";
@@ -10,6 +11,8 @@ import RegisterFooter from "./RegisterFooter";
 
 export default function RegisterLayout() {
     const router = useRouter();
+    const t = useTranslations("register");
+    const tCommon = useTranslations("common");
     const [loading, setLoading] = useState(false);
     const [registeredEmail, setRegisteredEmail] = useState("");
 
@@ -63,11 +66,17 @@ export default function RegisterLayout() {
             });
 
             if (response.ok) {
-                alert("Đăng ký khuôn mặt thành công! Bạn có thể đăng nhập ngay bây giờ.");
-                // Redirect về trang login
+                alert(t("faceRegistered"));
                 router.push("/");
             } else {
-                alert(`Lỗi: ${data.error || "Đã xảy ra lỗi"}`);
+                // Kiểm tra xem có phải lỗi khuôn mặt đã tồn tại không
+                if (data.code === "FACE_ALREADY_EXISTS" || (data.details && data.details.redirectToLogin)) {
+                    const existingEmail = data.details?.existingUserEmail || "";
+                    alert(t("faceAlreadyExists", { email: existingEmail }));
+                    router.push("/");
+                } else {
+                    alert(`${t("error")}: ${data.error || ""}`);
+                }
             }
         } catch (error: unknown) {
             console.error("Enroll error:", error);
@@ -112,10 +121,18 @@ export default function RegisterLayout() {
                     localStorage.setItem("token", result.token);
                     localStorage.setItem("user", JSON.stringify(result.user));
                 }
-                alert("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.");
+                alert(t("success"));
                 router.push("/");
             } else {
-                alert(`Lỗi: ${result.error || "Đã xảy ra lỗi"}`);
+                // Kiểm tra xem có phải lỗi khuôn mặt đã tồn tại không
+                if (result.code === "FACE_ALREADY_EXISTS" || (result.details && result.details.redirectToLogin)) {
+                    const existingEmail = result.details?.existingUserEmail || "";
+                    alert(t("faceAlreadyExists", { email: existingEmail }));
+                    // Redirect về trang login
+                    router.push("/");
+                } else {
+                    alert(`${t("error")}: ${result.error || ""}`);
+                }
             }
         } catch (error: unknown) {
             console.error("Register error:", error);
@@ -148,7 +165,7 @@ export default function RegisterLayout() {
                     <div className="relative flex items-center py-4">
                         <div className="grow border-t border-[#dde4e3] dark:border-gray-700"></div>
                         <span className="shrink mx-4 text-[#67837f] text-sm font-bold uppercase tracking-widest">
-                            or
+                            {tCommon("or")}
                         </span>
                         <div className="grow border-t border-[#dde4e3] dark:border-gray-700"></div>
                     </div>
