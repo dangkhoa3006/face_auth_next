@@ -14,9 +14,10 @@ interface RegisterFormProps {
     avatar?: string;
   }) => void;
   loading?: boolean;
+  faceScanned?: boolean;
 }
 
-export default function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
+export default function RegisterForm({ onSubmit, loading = false, faceScanned = false }: RegisterFormProps) {
   const t = useTranslations("register");
   const tCommon = useTranslations("common");
   const tValidation = useTranslations("validation");
@@ -62,14 +63,14 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
   };
 
   return (
-    <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
-      <div className="flex flex-col gap-2">
-        <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
+    <form className="space-y-2.5 mt-2" onSubmit={handleSubmit}>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-[#121716] dark:text-gray-200 text-xs font-bold">
           {tCommon("name")}
         </label>
         <div className="relative">
           <input
-            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
+            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-10 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
             placeholder={t("namePlaceholder")}
             type="text"
             value={name}
@@ -77,19 +78,19 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
             required
             disabled={loading}
           />
-          <span className="material-symbols-outlined absolute right-4 top-4 text-[#67837f]">
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#67837f] text-lg">
             person
           </span>
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
+        <label className="text-[#121716] dark:text-gray-200 text-xs font-bold">
           {tCommon("email")}
         </label>
         <div className="relative">
           <input
-            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
+            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-10 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
             placeholder={t("emailPlaceholder")}
             type="email"
             value={email}
@@ -97,19 +98,19 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
             required
             disabled={loading}
           />
-          <span className="material-symbols-outlined absolute right-4 top-4 text-[#67837f]">
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#67837f] text-lg">
             mail
           </span>
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
+        <label className="text-[#121716] dark:text-gray-200 text-xs font-bold">
           {tCommon("phone")}
         </label>
         <div className="relative">
           <input
-            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
+            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-10 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
             placeholder={t("phonePlaceholder")}
             type="tel"
             value={sdt}
@@ -117,19 +118,19 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
             required
             disabled={loading}
           />
-          <span className="material-symbols-outlined absolute right-4 top-4 text-[#67837f]">
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#67837f] text-lg">
             phone
           </span>
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
+        <label className="text-[#121716] dark:text-gray-200 text-xs font-bold">
           {tCommon("password")}
         </label>
         <div className="relative flex items-stretch">
           <input
-            className={`form-input flex-1 rounded-l-xl border-[#dde4e3] border-r-0 dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50 ${
+            className={`form-input flex-1 rounded-l-xl border-[#dde4e3] border-r-0 dark:border-gray-700 bg-white dark:bg-[#1f2229] h-10 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50 ${
               passwordErrors.length > 0 ? "border-red-500" : ""
             }`}
             placeholder={t("passwordPlaceholder")}
@@ -142,7 +143,7 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="flex items-center px-4 rounded-r-xl border border-l-0 border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] text-[#67837f] cursor-pointer hover:text-primary"
+            className="flex items-center px-3 rounded-r-xl border border-l-0 border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] text-[#67837f] cursor-pointer hover:text-primary h-10"
           >
             <span className="material-symbols-outlined">
               {showPassword ? "visibility_off" : "visibility"}
@@ -150,26 +151,26 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
           </button>
         </div>
         {passwordErrors.length > 0 && (
-          <div className="text-xs text-red-600 dark:text-red-400 space-y-1">
+          <div className="text-xs text-red-600 dark:text-red-400 space-y-0.5">
             {passwordErrors.map((error, index) => (
               <div key={index}>• {error}</div>
             ))}
           </div>
         )}
         {password.length > 0 && passwordErrors.length === 0 && (
-          <div className="text-xs text-green-600 dark:text-green-400">
+          <div className="text-xs text-green-600 dark:text-green-400 mt-0.5">
             {tValidation("passwordValid")}
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
+        <label className="text-[#121716] dark:text-gray-200 text-xs font-bold">
           {tCommon("confirmPassword")}
         </label>
         <div className="relative flex items-stretch">
           <input
-            className={`form-input flex-1 rounded-l-xl border-[#dde4e3] border-r-0 dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50 ${
+            className={`form-input flex-1 rounded-l-xl border-[#dde4e3] border-r-0 dark:border-gray-700 bg-white dark:bg-[#1f2229] h-10 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50 ${
               confirmPassword.length > 0 && password !== confirmPassword
                 ? "border-red-500"
                 : ""
@@ -184,7 +185,7 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="flex items-center px-4 rounded-r-xl border border-l-0 border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] text-[#67837f] cursor-pointer hover:text-primary"
+            className="flex items-center px-3 rounded-r-xl border border-l-0 border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] text-[#67837f] cursor-pointer hover:text-primary h-10"
           >
             <span className="material-symbols-outlined">
               {showConfirmPassword ? "visibility_off" : "visibility"}
@@ -192,35 +193,41 @@ export default function RegisterForm({ onSubmit, loading = false }: RegisterForm
           </button>
         </div>
         {confirmPassword.length > 0 && password !== confirmPassword && (
-          <div className="text-xs text-red-600 dark:text-red-400">
+          <div className="text-xs text-red-600 dark:text-red-400 mt-0.5">
             {tValidation("passwordMismatch")}
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[#121716] dark:text-gray-200 text-sm font-bold">
+        <label className="text-[#121716] dark:text-gray-200 text-xs font-bold">
           {tCommon("avatar")}
         </label>
         <div className="relative">
           <input
-            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
+            className="form-input w-full rounded-xl border-[#dde4e3] dark:border-gray-700 bg-white dark:bg-[#1f2229] h-10 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary dark:text-white placeholder:text-[#67837f]/50"
             placeholder={t("avatarPlaceholder")}
             type="url"
             value={avatar}
             onChange={(e) => setAvatar(e.target.value)}
             disabled={loading}
           />
-          <span className="material-symbols-outlined absolute right-4 top-4 text-[#67837f]">
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#67837f] text-lg">
             image
           </span>
         </div>
       </div>
 
+      {!faceScanned && (
+        <div className="text-xs text-amber-600 dark:text-amber-400 mb-2 flex items-center gap-1">
+          <span className="material-symbols-outlined text-sm">info</span>
+          <span>{t("scanFaceFirst")}</span>
+        </div>
+      )}
       <button
-        className="w-full bg-[#121716] dark:bg-white dark:text-[#121716] text-white py-4 rounded-xl font-bold text-base hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-[#121716] dark:bg-white dark:text-[#121716] text-white py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed mt-1"
         type="submit"
-        disabled={loading}
+        disabled={loading || !faceScanned}
       >
         {loading ? tCommon("loading") : tCommon("signUp")}
       </button>

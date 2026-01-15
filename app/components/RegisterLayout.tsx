@@ -15,76 +15,15 @@ export default function RegisterLayout() {
     const tCommon = useTranslations("common");
     const [loading, setLoading] = useState(false);
     const [registeredEmail, setRegisteredEmail] = useState("");
+    const [faceDescriptor, setFaceDescriptor] = useState<string>("");
 
     const handleFaceEnroll = async (faceDescriptor: string, userEmail: string) => {
-        setLoading(true);
-        const finalEmail = userEmail || registeredEmail;
-
-        console.log("Enrolling face:", {
-            email: finalEmail,
-            hasFaceDescriptor: !!faceDescriptor,
-            faceDescriptorLength: faceDescriptor?.length || 0,
-            faceDescriptorPreview: faceDescriptor?.substring(0, 50) || "",
-        });
-
-        try {
-            const requestBody = {
-                email: finalEmail,
-                faceDescriptor
-            };
-
-            console.log("Sending enroll request:", {
-                email: requestBody.email,
-                hasFaceDescriptor: !!requestBody.faceDescriptor,
-            });
-
-            const response = await fetch("/api/auth/enroll", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestBody),
-            });
-
-            // Kiểm tra content-type trước khi parse JSON
-            const contentType = response.headers.get("content-type");
-            let data;
-
-            if (contentType && contentType.includes("application/json")) {
-                data = await response.json();
-            } else {
-                // Nếu không phải JSON, đọc text để xem lỗi gì
-                const text = await response.text();
-                console.error("Non-JSON response:", text.substring(0, 500));
-                throw new Error(`Server trả về lỗi: ${response.status} ${response.statusText}`);
-            }
-
-            console.log("Enroll response:", {
-                ok: response.ok,
-                status: response.status,
-                data,
-            });
-
-            if (response.ok) {
-                alert(t("faceRegistered"));
-                router.push("/");
-            } else {
-                // Kiểm tra xem có phải lỗi khuôn mặt đã tồn tại không
-                if (data.code === "FACE_ALREADY_EXISTS" || (data.details && data.details.redirectToLogin)) {
-                    const existingEmail = data.details?.existingUserEmail || "";
-                    alert(t("faceAlreadyExists", { email: existingEmail }));
-                    router.push("/");
-                } else {
-                    alert(`${t("error")}: ${data.error || ""}`);
-                }
-            }
-        } catch (error: unknown) {
-            console.error("Enroll error:", error);
-            const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định";
-            alert(`Đã xảy ra lỗi khi đăng ký khuôn mặt: ${errorMessage}`);
-        } finally {
-            setLoading(false);
-        }
+        // Lưu faceDescriptor vào state để sử dụng khi submit form
+        setFaceDescriptor(faceDescriptor);
+        setRegisteredEmail(userEmail);
+        
+        // Hiển thị thông báo đã quét khuôn mặt thành công
+        alert(t("faceScanned"));
     };
 
     const handleFormSubmit = async (data: {
@@ -95,6 +34,12 @@ export default function RegisterLayout() {
         confirmPassword: string;
         avatar?: string;
     }) => {
+        // Kiểm tra xem đã quét khuôn mặt chưa
+        if (!faceDescriptor) {
+            alert(t("faceRequired"));
+            return;
+        }
+
         setLoading(true);
         setRegisteredEmail(data.email);
 
@@ -110,6 +55,7 @@ export default function RegisterLayout() {
                     sdt: data.sdt,
                     password: data.password,
                     avatar: data.avatar,
+                    faceDescriptor: faceDescriptor,
                 }),
             });
 
@@ -128,6 +74,8 @@ export default function RegisterLayout() {
                 if (result.code === "FACE_ALREADY_EXISTS" || (result.details && result.details.redirectToLogin)) {
                     const existingEmail = result.details?.existingUserEmail || "";
                     alert(t("faceAlreadyExists", { email: existingEmail }));
+                    // Reset faceDescriptor để yêu cầu quét lại
+                    setFaceDescriptor("");
                     // Redirect về trang login
                     router.push("/");
                 } else {
@@ -145,15 +93,26 @@ export default function RegisterLayout() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row">
+        <div className="h-screen flex flex-col lg:flex-row overflow-hidden">
             <VisualSection />
             {/* Right Section: Register Form */}
-            <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 md:p-20 bg-background-light dark:bg-background-dark">
-                <div className="w-full max-w-[480px]">
+            <div className="flex-1 flex flex-col items-center p-3 sm:p-4 md:p-6 bg-background-light dark:bg-background-dark overflow-y-auto">
+                <div className="w-full max-w-[480px] my-auto">
                     <RegisterHeader />
 
-                    {/* Biometric Action */}
-                    <div className="mb-8">
+                    {/* Biometric Action - Bắt buộc quét khuôn mặt trước */}
+                    <div className="mb-3">
+                        <div className="mb-2">
+                            <p className="text-xs text-[#67837f] dark:text-gray-400 mb-1">
+                                {t("faceRequiredMessage")}
+                            </p>
+                            {faceDescriptor && (
+                                <div className="flex items-center gap-2 text-xs text-green-600 dark:text-green-400">
+                                    <span className="material-symbols-outlined text-sm">check_circle</span>
+                                    <span>{t("faceScanned")}</span>
+                                </div>
+                            )}
+                        </div>
                         <FaceRecognitionButton
                             onEnroll={handleFaceEnroll}
                             mode="enroll"
@@ -162,16 +121,20 @@ export default function RegisterLayout() {
                     </div>
 
                     {/* Divider */}
-                    <div className="relative flex items-center py-4">
+                    <div className="relative flex items-center py-1.5">
                         <div className="grow border-t border-[#dde4e3] dark:border-gray-700"></div>
-                        <span className="shrink mx-4 text-[#67837f] text-sm font-bold uppercase tracking-widest">
-                            {tCommon("or")}
+                        <span className="shrink mx-4 text-[#67837f] text-xs font-bold uppercase tracking-widest">
+                            {tCommon("then")}
                         </span>
                         <div className="grow border-t border-[#dde4e3] dark:border-gray-700"></div>
                     </div>
 
                     {/* Traditional Form */}
-                    <RegisterForm onSubmit={handleFormSubmit} loading={loading} />
+                    <RegisterForm 
+                        onSubmit={handleFormSubmit} 
+                        loading={loading}
+                        faceScanned={!!faceDescriptor}
+                    />
 
                     {/* Footer */}
                     <RegisterFooter />

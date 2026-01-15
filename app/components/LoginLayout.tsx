@@ -179,7 +179,7 @@ export default function LoginLayout() {
   };
 
   return (
-    <div className="h-screen flex flex-col lg:flex-row overflow-hidden fixed inset-0">
+    <div className="min-h-screen flex flex-col lg:flex-row overflow-hidden fixed inset-0">
       <VisualSection />
       {/* Right Section: Login Form */}
       <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 md:p-20 bg-background-light dark:bg-background-dark overflow-hidden">

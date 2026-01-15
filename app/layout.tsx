@@ -38,7 +38,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${manrope.variable} bg-background-light dark:bg-background-dark font-display text-[#121716] dark:text-white antialiased h-screen overflow-hidden`}
+        className={`${manrope.variable} bg-background-light dark:bg-background-dark font-display text-[#121716] dark:text-white antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           {children}

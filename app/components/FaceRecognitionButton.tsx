@@ -277,7 +277,7 @@ export default function FaceRecognitionButton({
       <button
         onClick={handleClick}
         disabled={loading || !modelsReady}
-        className="group relative w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary via-[#2ba08a] to-primary hover:from-[#1c7162] hover:via-[#248f7d] hover:to-[#1c7162] disabled:opacity-50 disabled:cursor-not-allowed text-white py-4 px-6 rounded-xl font-bold text-base transition-all duration-300 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
+        className="group relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary via-[#2ba08a] to-primary hover:from-[#1c7162] hover:via-[#248f7d] hover:to-[#1c7162] disabled:opacity-50 disabled:cursor-not-allowed text-white py-2.5 px-4 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
       >
         {/* Animated background gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>

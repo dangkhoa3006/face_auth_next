@@ -54,6 +54,11 @@ export class AuthService implements IAuthService {
       );
     }
 
+    // Yêu cầu faceDescriptor bắt buộc
+    if (!data.faceDescriptor) {
+      throw new ValidationException("Vui lòng quét khuôn mặt trước khi đăng ký");
+    }
+
     // Kiểm tra email đã tồn tại chưa
     const existingUser = await this.userRepository.findByEmail(data.email);
     if (existingUser) {
