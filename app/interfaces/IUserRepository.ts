@@ -29,8 +29,12 @@ export interface IUserRepository {
    * Tạo user mới
    */
   create(data: {
+    name: string;
     email: string;
-    faceId: string;
+    sdt: string;
+    password: string;
+    avatar?: string | null;
+    faceId?: string | null;
     faceDescriptor?: string | null;
   }): Promise<User>;
 

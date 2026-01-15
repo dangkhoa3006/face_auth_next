@@ -7,4 +7,5 @@ export {
   NotFoundException,
   ConflictException,
   DatabaseException,
+  UnauthorizedException,
 } from "./AppException";

@@ -11,8 +11,13 @@ datasource db {
 
 model User {
   id            String   @id @default(cuid())
+  name          String   @default("")
   email         String   @unique
-  faceId        String   @unique // Face descriptor (JSON string) hoặc faceId từ FaceIO
+  sdt           String   @default("") @unique // Số điện thoại
+  password      String   @default("$2a$10$default") // Password đã hash
+  avatar        String?  // URL avatar
+  faceId        String?  @unique // Face descriptor (JSON string) hoặc faceId từ FaceIO
   faceDescriptor String?  // Face descriptor từ face-api.js (JSON string của Float32Array)
   createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
 }

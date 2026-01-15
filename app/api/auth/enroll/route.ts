@@ -38,7 +38,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user: {
         id: user.id,
         email: user.email,
-        faceId: user.faceId,
+        faceId: user.faceId || null,
         createdAt: user.createdAt,
       },
     };

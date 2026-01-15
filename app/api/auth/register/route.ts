@@ -1,20 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serviceProvider } from "@/app/providers/ServiceProvider";
 import { handleError } from "@/app/middleware/errorHandler";
-import { LoginDTO, LoginResponseDTO } from "@/app/dto/LoginDTO";
-import { ValidationException } from "@/app/exceptions/AppException";
+import { RegisterDTO, RegisterResponseDTO } from "@/app/dto/EnrollDTO";
 import { JwtService } from "@/app/services/JwtService";
 
 /**
- * POST /api/auth/login
- * Đăng nhập bằng email/password hoặc faceId/faceDescriptor
+ * POST /api/auth/register
+ * Đăng ký user mới với thông tin đầy đủ (name, email, sdt, password, avatar)
  * 
  * Sử dụng Service Provider Pattern và Repository Pattern
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // Parse request body
-    let body: LoginDTO;
+    let body: RegisterDTO;
     try {
       body = await request.json();
     } catch (error) {
@@ -24,26 +23,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Get Auth Service và JWT Service từ Service Provider
+    // Get Auth Service từ Service Provider
     const authService = serviceProvider.getAuthService();
     const jwtService = new JwtService();
 
-    // Xác định phương thức login
-    let user;
-    if (body.email && body.password) {
-      // Login bằng email/password
-      user = await authService.loginWithEmailPassword(body.email, body.password);
-    } else if (body.faceId) {
-      // Login bằng faceId (từ FaceIO)
-      user = await authService.loginWithFaceId(body.faceId);
-    } else if (body.faceDescriptor) {
-      // Login bằng faceDescriptor (từ face-api.js)
-      user = await authService.loginWithFaceDescriptor(body.faceDescriptor);
-    } else {
-      throw new ValidationException(
-        "Cần cung cấp email/password hoặc faceId/faceDescriptor"
-      );
-    }
+    // Gọi service để register user
+    const user = await authService.register({
+      name: body.name,
+      email: body.email,
+      sdt: body.sdt,
+      password: body.password,
+      avatar: body.avatar,
+      faceId: body.faceId,
+      faceDescriptor: body.faceDescriptor,
+    });
 
     // Tạo JWT token
     const token = jwtService.generateToken({
@@ -52,8 +45,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     // Tạo response DTO
-    const response: LoginResponseDTO = {
-      message: "Đăng nhập thành công",
+    const response: RegisterResponseDTO = {
+      message: "Đăng ký thành công",
       token,
       user: {
         id: user.id,
@@ -65,7 +58,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     };
 
-    return NextResponse.json(response, { status: 200 });
+    return NextResponse.json(response, { status: 201 });
   } catch (error) {
     return handleError(error);
   }

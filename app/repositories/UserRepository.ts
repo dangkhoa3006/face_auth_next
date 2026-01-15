@@ -1,6 +1,10 @@
 import { User, PrismaClient } from "@prisma/client";
 import { IUserRepository } from "../interfaces/IUserRepository";
-import { DatabaseException, NotFoundException } from "../exceptions/AppException";
+import {
+  DatabaseException,
+  NotFoundException,
+  ConflictException,
+} from "../exceptions/AppException";
 
 /**
  * User Repository Implementation
@@ -62,15 +66,23 @@ export class UserRepository implements IUserRepository {
   }
 
   async create(data: {
+    name: string;
     email: string;
-    faceId: string;
+    sdt: string;
+    password: string;
+    avatar?: string | null;
+    faceId?: string | null;
     faceDescriptor?: string | null;
   }): Promise<User> {
     try {
       return await this.prisma.user.create({
         data: {
+          name: data.name,
           email: data.email,
-          faceId: data.faceId,
+          sdt: data.sdt,
+          password: data.password,
+          avatar: data.avatar || null,
+          faceId: data.faceId || null,
           faceDescriptor: data.faceDescriptor || null,
         },
       });
@@ -78,8 +90,13 @@ export class UserRepository implements IUserRepository {
       // Handle unique constraint violation
       if (error.code === "P2002") {
         const field = error.meta?.target?.[0] || "field";
+        const fieldNames: Record<string, string> = {
+          email: "Email",
+          sdt: "Số điện thoại",
+          faceId: "FaceId",
+        };
         throw new ConflictException(
-          `${field === "email" ? "Email" : "FaceId"} đã tồn tại`,
+          `${fieldNames[field] || field} đã tồn tại`,
           { field, code: error.code }
         );
       }

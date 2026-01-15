@@ -114,8 +114,14 @@ export default function LoginLayout() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(`Đăng nhập thành công! Chào mừng ${data.user.email}`);
-        // Có thể redirect hoặc lưu token ở đây
+        // Lưu token vào localStorage
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
+        alert(`Đăng nhập thành công! Chào mừng ${data.user.name || data.user.email}`);
+        // Có thể redirect đến trang dashboard ở đây
+        window.location.href = "/dashboard";
       } else {
         alert(`Lỗi: ${data.error || "Không tìm thấy người dùng"}`);
       }
@@ -134,9 +140,33 @@ export default function LoginLayout() {
   ) => {
     setLoading(true);
     try {
-      // TODO: Implement email/password login API
-      console.log("Form submit:", { email, password, remember });
-      alert("Tính năng đăng nhập bằng email/password đang được phát triển");
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Lưu token vào localStorage
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          
+          // Nếu remember = true, có thể lưu vào cookie với thời gian dài hơn
+          if (remember) {
+            // Có thể implement cookie storage ở đây nếu cần
+          }
+        }
+        alert(`Đăng nhập thành công! Chào mừng ${data.user.name || data.user.email}`);
+        // Redirect đến trang dashboard
+        window.location.href = "/dashboard";
+      } else {
+        alert(`Lỗi: ${data.error || "Email hoặc password không đúng"}`);
+      }
     } catch (error) {
       console.error("Form login error:", error);
       alert("Đã xảy ra lỗi khi đăng nhập");

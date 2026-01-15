@@ -57,3 +57,12 @@ export class DatabaseException extends AppException {
     super(message, 500, "DATABASE_ERROR", details);
   }
 }
+
+/**
+ * Unauthorized Exception (authentication failed)
+ */
+export class UnauthorizedException extends AppException {
+  constructor(message: string = "Không có quyền truy cập", details?: any) {
+    super(message, 401, "UNAUTHORIZED", details);
+  }
+}
